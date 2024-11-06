@@ -32,7 +32,7 @@ public class Warsztat_serwis {
         return listaKlientow;
     }
     public Klient Dodawanie_klienta(Klient klient){
-        Optional<Klient> staryKlient = klientRepository.findByKlientID(klient.getKlientID());
+        Optional<Klient> staryKlient = klientRepository.findByTelefon(klient.getTelefon());
         if(staryKlient.isEmpty()){
             klientRepository.save(klient);
             return klient;
@@ -40,7 +40,7 @@ public class Warsztat_serwis {
         return staryKlient.get();
     }
     public void Modyfikacje_danych_klienta(Klient klient){
-        Optional<Klient> staryKlient = klientRepository.findByKlientID(klient.getKlientID());
+        Optional<Klient> staryKlient = klientRepository.findByTelefon(klient.getTelefon());
 
         if(staryKlient.isPresent()){
             //staryKlient.get().setKlientID(klient.getKlientID());
@@ -107,7 +107,7 @@ public class Warsztat_serwis {
 
         Dodawanie_klienta(klient);
         Dodawanie_pojazdu(pojazd);
-        Naprawa nowa_naprawa = new Naprawa(pojazd.getVIN());
+        Naprawa nowa_naprawa = new Naprawa(pojazd);
         Dodawanie_naprawy(nowa_naprawa);
         return nowa_naprawa;
 

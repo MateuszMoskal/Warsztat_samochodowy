@@ -12,5 +12,6 @@ public interface KlientRepository extends JpaRepository<Klient, String> {
 
 
     Optional<Klient> findByKlientID(int klientID);
+    Optional<Klient> findByTelefon(String telefon);
 }
 
