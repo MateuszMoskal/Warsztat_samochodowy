@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface MechanikRepository extends JpaRepository<Mechanik, String> {
 
 
-    Optional<Mechanik> findByName(String name);
+    Optional<Mechanik> findByImieAndNazwisko(String imie, String nazwisko);
 }

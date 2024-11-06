@@ -30,7 +30,7 @@ public class Mechanik_serwis {
 
         warsztat_serwis.Dodawanie_klienta(klient);
         warsztat_serwis.Dodawanie_pojazdu(pojazd);
-        Naprawa nowa_naprawa = new Naprawa(pojazd.getVIN(), mechanik.getMechanikID());
+        Naprawa nowa_naprawa = new Naprawa(pojazd, mechanik);
         warsztat_serwis.Dodawanie_naprawy(nowa_naprawa);
         return nowa_naprawa;
 

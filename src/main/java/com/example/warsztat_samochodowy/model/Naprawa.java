@@ -8,30 +8,35 @@ public class Naprawa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int NaprawaID;
+    private int naprawaID;
     private Date data_rozpoczecia;
     private Date data_zakonczenia;
     private String stan;
     private String opis_usterki;
     private String protokol_naprawy;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private int VIN; // klucz obcy
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private int mechanik; // klucz obcy
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "VIN", referencedColumnName = "VIN")
+    //private String VIN; // klucz obcy
+    private Pojazd pojazd;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "mechanikID", referencedColumnName = "mechanikID")
+    //private int mechanik; // klucz obcy
+    private Mechanik mechanik;
 
-    public Naprawa(int VIN, int mechanik) {
-        this.VIN = VIN;
+    public Naprawa(Pojazd pojazd, Mechanik mechanik) {
+        this.pojazd = pojazd;
         this.mechanik = mechanik;
     }
 
-    public Naprawa(int VIN) {
-        this.VIN = VIN;
+    public Naprawa(Pojazd pojazd) {
+        this.pojazd = pojazd;
+    }
+
+    public Naprawa() {
     }
 
     public void setNaprawaID(int naprawaID) {
-        this.NaprawaID = naprawaID;
+        this.naprawaID = naprawaID;
     }
 
     public void setData_rozpoczecia(Date data_rozpoczecia) {
@@ -54,11 +59,11 @@ public class Naprawa {
         this.protokol_naprawy = protokol_naprawy;
     }
 
-    public void setVIN(int VIN) {
-        this.VIN = VIN;
+    public void setPojazd(Pojazd pojazd) {
+        this.pojazd = pojazd;
     }
 
-    public void setMechanik(int mechanik) {
+    public void setMechanik(Mechanik mechanik) {
         this.mechanik = mechanik;
     }
 }

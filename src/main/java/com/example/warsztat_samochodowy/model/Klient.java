@@ -2,6 +2,8 @@ package com.example.warsztat_samochodowy.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "Klienci")
@@ -9,36 +11,38 @@ import jakarta.persistence.*;
 public class Klient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int KlientID;
+    private int klientID;
     @Column(nullable = false)
-    private String Imie;
+    private String imie;
     @Column(nullable = false)
-    private String Nazwisko;
-    @Column(nullable = false)
+    private String nazwisko;
+    @Column(nullable = false, unique = true)
     private String telefon;
     @Column(nullable = false)
     private String email;
+    @OneToMany(mappedBy = "klient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pojazd> pojazdy;
 
     public Klient(String imie, String nazwisko, String telefon, String email) {
-        this.Imie = imie;
-        this.Nazwisko = nazwisko;
+        this.imie = imie;
+        this.nazwisko = nazwisko;
         this.telefon = telefon;
         this.email = email;
     }
 
-    //public Klient() {
-    //}
+    public Klient() {
+    }
 
     public int getKlientID() {
-        return KlientID;
+        return klientID;
     }
 
     public String getImie() {
-        return Imie;
+        return imie;
     }
 
     public String getNazwisko() {
-        return Nazwisko;
+        return nazwisko;
     }
 
     public String getEmail() {
@@ -51,15 +55,15 @@ public class Klient {
 
     public void setKlientID(int KlientID) {
 
-        this.KlientID = KlientID;
+        this.klientID = KlientID;
     }
 
     public void setImie(String imie) {
-        Imie = imie;
+        this.imie = imie;
     }
 
     public void setNazwisko(String nazwisko) {
-        Nazwisko = nazwisko;
+        this.nazwisko = nazwisko;
     }
 
     public void setTelefon(String telefon) {
