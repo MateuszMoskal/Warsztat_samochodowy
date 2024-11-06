@@ -12,5 +12,5 @@ public interface PojazdRepository extends JpaRepository<Pojazd, String> {
 
 
     Optional<Pojazd> findByPojazdID(String PojazdID);
-    Optional<Pojazd> findByPojazdVIN(String VIN);
+    Optional<Pojazd> findByVIN(String VIN);
 }

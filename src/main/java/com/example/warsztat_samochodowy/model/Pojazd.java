@@ -7,7 +7,7 @@ import java.util.UUID;
 @Table(name = "Pojazdy")
 public class Pojazd {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private String pojazdID = UUID.randomUUID().toString();
     private String rejestracja;
     private String marka;

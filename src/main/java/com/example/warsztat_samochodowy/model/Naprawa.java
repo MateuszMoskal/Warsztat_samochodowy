@@ -15,11 +15,11 @@ public class Naprawa {
     private String opis_usterki;
     private String protokol_naprawy;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @JoinColumn(name = "VIN", referencedColumnName = "VIN")
     //private String VIN; // klucz obcy
     private Pojazd pojazd;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @JoinColumn(name = "mechanikID", referencedColumnName = "mechanikID")
     //private int mechanik; // klucz obcy
     private Mechanik mechanik;
 

@@ -24,7 +24,12 @@ public class Warsztat_serwis {
     private NaprawaRepository naprawaRepository;
     private PojazdRepository pojazdRepository;
 
-
+    public Warsztat_serwis(KlientRepository klientRepository, MechanikRepository mechanikRepository, NaprawaRepository naprawaRepository, PojazdRepository pojazdRepository) {
+        this.klientRepository = klientRepository;
+        this.mechanikRepository = mechanikRepository;
+        this.naprawaRepository = naprawaRepository;
+        this.pojazdRepository = pojazdRepository;
+    }
 
     public List<Klient>Podglad_klientow(){
         List<Klient> listaKlientow = new ArrayList<>();
@@ -82,7 +87,7 @@ public class Warsztat_serwis {
         return listaPojazdow;
     }
     public Pojazd Dodawanie_pojazdu(Pojazd pojazd){
-        Optional<Pojazd> staryPojazd = pojazdRepository.findByPojazdID(pojazd.getPojazdID());
+        Optional<Pojazd> staryPojazd = pojazdRepository.findByVIN(pojazd.getVIN());
         if(staryPojazd.isEmpty()) {
             pojazdRepository.save(pojazd);
             return pojazd;
@@ -90,7 +95,7 @@ public class Warsztat_serwis {
         return staryPojazd.get();
     }
     public void Modyfikacje_danych_pojazdu(Pojazd pojazd){
-        Optional<Pojazd> staryPojazd = pojazdRepository.findByPojazdID(pojazd.getPojazdID());
+        Optional<Pojazd> staryPojazd = pojazdRepository.findByVIN(pojazd.getVIN());
 
         if(staryPojazd.isPresent()){
             staryPojazd.get().setPojazdID(pojazd.getPojazdID());
