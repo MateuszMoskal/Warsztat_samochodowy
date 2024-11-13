@@ -35,6 +35,38 @@ public class Naprawa {
     public Naprawa() {
     }
 
+    public int getNaprawaID() {
+        return naprawaID;
+    }
+
+    public Date getData_rozpoczecia() {
+        return data_rozpoczecia;
+    }
+
+    public Date getData_zakonczenia() {
+        return data_zakonczenia;
+    }
+
+    public String getStan() {
+        return stan;
+    }
+
+    public String getOpis_usterki() {
+        return opis_usterki;
+    }
+
+    public String getProtokol_naprawy() {
+        return protokol_naprawy;
+    }
+
+    public Pojazd getPojazd() {
+        return pojazd;
+    }
+
+    public Mechanik getMechanik() {
+        return mechanik;
+    }
+
     public void setNaprawaID(int naprawaID) {
         this.naprawaID = naprawaID;
     }

@@ -16,7 +16,7 @@ public class Pojazd {
     @Id
     private String VIN; // klucz podstawowy
     @ManyToOne
-    @JoinColumn(name = "klientID", insertable = false, updatable = false)
+    @JoinColumn(name = "klientid")
     private Klient klient;
 
     public Pojazd(String rejestracja, String marka, String model, int rocznik, String VIN) {
