@@ -31,7 +31,7 @@ public class WarsztatController {
         return ResponseEntity.ok(nowy_klient);
     }
 
-    @PutMapping("/modyfikuj/dane/klienta")
+    @PatchMapping("/modyfikuj/dane/klienta")
     public ResponseEntity<Klient> Modyfikuj_dane_klienta(@RequestBody Klient klient){
         warsztat_serwis.Modyfikacje_danych_klienta(klient);
         return ResponseEntity.ok(klient);
@@ -63,8 +63,13 @@ public class WarsztatController {
 
     @PostMapping("/dodaj/naprawe")
     public ResponseEntity<Naprawa> Dodaj_naprawe(@RequestBody Naprawa naprawa){
-        Naprawa nowa_naprawa = warsztat_serwis.Dodawanie_naprawy(naprawa);
-        return ResponseEntity.ok(nowa_naprawa);
+        try{
+            Naprawa nowa_naprawa = warsztat_serwis.Dodawanie_naprawy(naprawa);
+            return ResponseEntity.ok(nowa_naprawa);
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body(naprawa);
+        }
     }
 
     @GetMapping("/pojazdy")
@@ -79,7 +84,7 @@ public class WarsztatController {
         return ResponseEntity.ok(nowy_pojazd);
     }
 
-    @PutMapping("/modyfikuj/dane/pojazdow")
+    @PatchMapping("/modyfikuj/dane/pojazdow")
     public ResponseEntity<Pojazd> Modyfikuj_pojazd(@RequestBody Pojazd pojazd){
         warsztat_serwis.Modyfikacje_danych_pojazdu(pojazd);
         return ResponseEntity.ok(pojazd);
@@ -87,7 +92,12 @@ public class WarsztatController {
 
     @PostMapping("/dodaj/nowe/zgloszenie")
     public ResponseEntity<Naprawa> Nowe_zgloszenie(@RequestBody Klient klient, Pojazd pojazd){
-        Naprawa naprawa = warsztat_serwis.Dodanie_nowego_zgloszenia(klient, pojazd);
-        return ResponseEntity.ok(naprawa);
+        try{
+            Naprawa naprawa = warsztat_serwis.Dodanie_nowego_zgloszenia(klient, pojazd);
+            return ResponseEntity.ok(naprawa);
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 }

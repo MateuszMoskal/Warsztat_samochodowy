@@ -1,23 +1,25 @@
-localhost:8080/klienci
+localhost:8080/klienci #działa
 
 
-localhost:8080/dodaj/klienta
+localhost:8080/dodaj/klienta #nie ma listy pojazdów
 
 {
     "imie": "Bozena",
     "nazwisko": "Kowalska",
     "telefon": "753289111",
-    "email": "bozenakowalska@gmail.com",
-    "pojazdy": [
-    {
-        "rejestracja": "DW 19831",
-        "marka": "Audi",
-        "model": "S7",
-        "rocznik": 2011,
-        "VIN": "ABSDAE221293821283"
-    }
-    ]
+    "email": "bozenakowalska@gmail.com"
 }
+
+localhost:8080/modyfikuj/dane/klienta #zwraca id = 0
+
+{
+    "imie": "Bozena",
+    "nazwisko": "Kowalska",
+    "telefon": "753289111",
+    "email": "bozenakowalska777@gmail.com"
+}
+
+localhost:8080/pojazdy
 
 localhost:8080/dodaj/pojazdy
 
@@ -29,12 +31,32 @@ localhost:8080/dodaj/pojazdy
     "VIN": "ABSDAE221293821283"
 }
 
-localhost:8080/dodaj/mechanika
+localhost:8080/modyfikuj/dane/pojazdow
+
+{
+     "rejestracja": "DW 20131",
+     "marka": "Audi",
+     "model": "S7",
+     "rocznik": 2011
+}
+
+localhost:8080/mechanicy #działa
+
+localhost:8080/dodaj/mechanika #działa
 
 {
     "imie": "Zdzisław",
     "nazwisko": "Przybylski"
 }
+
+localhost:8080/usun/mechanika #działa - wyświetla id = zero przy usuwaniu
+
+{
+    "imie": "Zdzisław",
+    "nazwisko": "Przybylski"
+}
+
+localhost:8080/naprawy
 
 localhost:8080/dodaj/naprawe
 
@@ -56,16 +78,18 @@ localhost:8080/dodaj/nowe/zgloszenie
     "imie": "Bozena",
     "nazwisko": "Kowalska",
     "telefon": "753289111",
-    "email": "bozenakowalska@gmail.com"
-},
-
-{
-      "rejestracja": "DW 19831",
-      "marka": "Audi",
-      "model": "S7",
-      "rocznik": 2011,
-      "VIN": "ABSDAE221293821283"
+    "email": "bozenakowalska@gmail.com",
+    "pojazdy": [
+    {
+        "rejestracja": "DW 19831",
+        "marka": "Audi",
+        "model": "S7",
+        "rocznik": 2011,
+        "VIN": "ABSDAE221293821283"
+    }
+    ]
 }
+
 
 localhost:8080/dodaj/nowe_zgloszenie
 
@@ -77,15 +101,32 @@ localhost:8080/dodaj/nowe_zgloszenie
 },
 
 {
-      "rejestracja": "DW 19831",
-      "marka": "Audi",
-      "model": "S7",
-      "rocznik": 2011,
-      "VIN": "ABSDAE221293821283"
+    "rejestracja": "DW 19831",
+    "marka": "Audi",
+    "model": "S7",
+    "rocznik": 2011,
+    "VIN": "ABSDAE221293821283"
 },
 
 {
-        "imie": "Zdzisław",
-        "nazwisko": "Przybylski"
+    "imie": "Zdzisław",
+    "nazwisko": "Przybylski"
 }
 
+localhost:8080/modyfikuj/opis_usterki
+{
+    "naprawaID": 1,
+    "opis_usterki": "Problemy z silnikiem"
+}
+
+localhost:8080/modyfikuj/rozpoczecie_naprawy
+{
+    "naprawaID": 1,
+    "data_rozpoczecia": "2024-10-02"
+}
+
+localhost:8080/modyfikuj/zakonczenie_naprawy
+{
+    "naprawaID": 1,
+    "data_zakonczenia: "2024-10-11"
+}

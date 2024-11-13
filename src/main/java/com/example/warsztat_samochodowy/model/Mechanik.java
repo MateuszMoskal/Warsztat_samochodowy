@@ -1,6 +1,9 @@
 package com.example.warsztat_samochodowy.model;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "Mechanicy")
 public class Mechanik {
@@ -12,6 +15,9 @@ public class Mechanik {
     @Column(nullable = false)
     private String nazwisko;
     //private int naprawy;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "mechanikID")
+    private List<Naprawa> naprawy = new ArrayList<Naprawa>();
 
 
     public Mechanik(String nazwisko, String imie) {

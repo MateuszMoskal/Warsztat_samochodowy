@@ -2,6 +2,7 @@ package com.example.warsztat_samochodowy.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,8 +21,9 @@ public class Klient {
     private String telefon;
     @Column(nullable = false)
     private String email;
-    @OneToMany(mappedBy = "klient", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Pojazd> pojazdy;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "klientID")
+    private List<Pojazd> pojazdy = new ArrayList<>();
 
     public Klient(String imie, String nazwisko, String telefon, String email) {
         this.imie = imie;

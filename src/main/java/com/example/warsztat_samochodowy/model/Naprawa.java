@@ -14,12 +14,12 @@ public class Naprawa {
     private String stan;
     private String opis_usterki;
     private String protokol_naprawy;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "VIN", referencedColumnName = "VIN")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "VIN")
     //private String VIN; // klucz obcy
     private Pojazd pojazd;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "mechanikID", referencedColumnName = "mechanikID")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "mechanikID")
     //private int mechanik; // klucz obcy
     private Mechanik mechanik;
 
@@ -33,6 +33,38 @@ public class Naprawa {
     }
 
     public Naprawa() {
+    }
+
+    public int getNaprawaID() {
+        return naprawaID;
+    }
+
+    public Date getData_rozpoczecia() {
+        return data_rozpoczecia;
+    }
+
+    public Date getData_zakonczenia() {
+        return data_zakonczenia;
+    }
+
+    public String getStan() {
+        return stan;
+    }
+
+    public String getOpis_usterki() {
+        return opis_usterki;
+    }
+
+    public String getProtokol_naprawy() {
+        return protokol_naprawy;
+    }
+
+    public Pojazd getPojazd() {
+        return pojazd;
+    }
+
+    public Mechanik getMechanik() {
+        return mechanik;
     }
 
     public void setNaprawaID(int naprawaID) {

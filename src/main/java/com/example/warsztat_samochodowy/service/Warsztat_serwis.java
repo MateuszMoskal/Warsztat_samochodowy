@@ -1,5 +1,6 @@
 package com.example.warsztat_samochodowy.service;
 
+import com.example.warsztat_samochodowy.exception.KlientAlreadyExistException;
 import com.example.warsztat_samochodowy.model.Klient;
 import com.example.warsztat_samochodowy.model.Mechanik;
 import com.example.warsztat_samochodowy.model.Naprawa;
@@ -8,8 +9,10 @@ import com.example.warsztat_samochodowy.repository.KlientRepository;
 import com.example.warsztat_samochodowy.repository.MechanikRepository;
 import com.example.warsztat_samochodowy.repository.NaprawaRepository;
 import com.example.warsztat_samochodowy.repository.PojazdRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,26 +39,30 @@ public class Warsztat_serwis {
         listaKlientow = klientRepository.findAll();
         return listaKlientow;
     }
-    public Klient Dodawanie_klienta(Klient klient){
-        Optional<Klient> staryKlient = klientRepository.findByTelefon(klient.getTelefon());
-        if(staryKlient.isEmpty()){
-            klientRepository.save(klient);
-            return klient;
+    public Klient Dodawanie_klienta(Klient klient) {
+        try {
+            return klientRepository.save(klient);
+        } catch (Exception e) {
+            throw new KlientAlreadyExistException("Klient z podanym numerem telefonu już istnieje w bazie");
         }
-        return staryKlient.get();
     }
-    public void Modyfikacje_danych_klienta(Klient klient){
+
+    public Klient Modyfikacje_danych_klienta(Klient klient){
         Optional<Klient> staryKlient = klientRepository.findByTelefon(klient.getTelefon());
 
         if(staryKlient.isPresent()){
             //staryKlient.get().setKlientID(klient.getKlientID());
             staryKlient.get().setImie(klient.getImie());
             staryKlient.get().setNazwisko(klient.getNazwisko());
-            staryKlient.get().setTelefon(klient.getTelefon());
+            //staryKlient.get().setTelefon(klient.getTelefon());
             staryKlient.get().setEmail(klient.getEmail());
+            return klientRepository.save(staryKlient.get());
+        }
+        else
+        {
+            throw new EntityNotFoundException("Klient nie istnieje w bazie");
         }
 
-        klientRepository.save(staryKlient.get());
     }
     public List<Mechanik>Podglad_mechanikow(){
         List<Mechanik> listaMechanikow = new ArrayList<>();
@@ -63,12 +70,22 @@ public class Warsztat_serwis {
         return listaMechanikow;
     }
     public Mechanik Dodawanie_mechanika(Mechanik mechanik){
-        mechanikRepository.save(mechanik);
-        return mechanik;
+        try {
+            return mechanikRepository.save(mechanik);
+        } catch (Exception e) {
+            throw new KlientAlreadyExistException("Mechanik już istnieje w bazie");
+        }
     }
     public void Usuniecie_danych_mechanika(Mechanik mechanik){
         // sprawdzic czy mechanik istnieje w bazie
-        mechanikRepository.delete(mechanik);
+        Optional<Mechanik> mechanikZBazyDanych = mechanikRepository.findByImieAndNazwisko(mechanik.getImie(), mechanik.getNazwisko());
+        if(mechanikZBazyDanych.isPresent()){
+            mechanikRepository.delete(mechanikZBazyDanych.get());
+        }
+        else
+        {
+            throw new EntityNotFoundException("Mechanik nie istnieje w bazie");
+        }
     }
     public List<Naprawa>Podglad_napraw(){
 
@@ -76,9 +93,14 @@ public class Warsztat_serwis {
         listaNapraw = naprawaRepository.findAll();
         return listaNapraw;
     }
-    public Naprawa Dodawanie_naprawy(Naprawa naprawa){
-       naprawaRepository.save(naprawa);
-       return naprawa;
+    public Naprawa Dodawanie_naprawy(Naprawa naprawa) throws SQLException {
+        Optional<Pojazd> pojazd = pojazdRepository.findByVIN(naprawa.getPojazd().getVIN());
+        Optional<Mechanik> mechanik = mechanikRepository.findByImieAndNazwisko(naprawa.getMechanik().getImie(), naprawa.getMechanik().getNazwisko());
+        if (pojazd.isPresent() && mechanik.isPresent()) {
+            return naprawaRepository.save(naprawa);
+        } else {
+            throw new SQLException("Nie udalo sie utworzyc naprawy");
+        }
     }
     public List<Pojazd>Podglad_pojazdow(){
 
@@ -103,19 +125,22 @@ public class Warsztat_serwis {
             staryPojazd.get().setModel(pojazd.getModel());
             staryPojazd.get().setRejestracja(pojazd.getRejestracja());
             staryPojazd.get().setRocznik(pojazd.getRocznik());
+            pojazdRepository.save(staryPojazd.get());
+        }
+        else
+        {
+            throw new EntityNotFoundException("Pojazd nie istnieje w bazie");
         }
 
-        pojazdRepository.save(staryPojazd.get());
     }
 
-    public Naprawa Dodanie_nowego_zgloszenia(Klient klient, Pojazd pojazd){
+    public Naprawa Dodanie_nowego_zgloszenia(Klient klient, Pojazd pojazd) throws SQLException {
 
         Dodawanie_klienta(klient);
         Dodawanie_pojazdu(pojazd);
         Naprawa nowa_naprawa = new Naprawa(pojazd);
         Dodawanie_naprawy(nowa_naprawa);
         return nowa_naprawa;
-
     }
 
 }

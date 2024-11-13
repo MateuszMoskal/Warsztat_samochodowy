@@ -26,13 +26,10 @@ public class Mechanik_serwis {
         return listaNapraw;
     }
 
-    public Naprawa Dodanie_nowego_zgloszenia(Klient klient, Pojazd pojazd, Mechanik mechanik){
+    public Naprawa Przyjecie_naprawy(Naprawa naprawa, Mechanik mechanik){
 
-        warsztat_serwis.Dodawanie_klienta(klient);
-        warsztat_serwis.Dodawanie_pojazdu(pojazd);
-        Naprawa nowa_naprawa = new Naprawa(pojazd, mechanik);
-        warsztat_serwis.Dodawanie_naprawy(nowa_naprawa);
-        return nowa_naprawa;
+        naprawa.setMechanik(mechanik);
+        return naprawaRepository.save(naprawa);
 
     }
 
