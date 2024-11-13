@@ -1,6 +1,8 @@
 package com.example.warsztat_samochodowy.model;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +20,9 @@ public class Pojazd {
     @ManyToOne
     @JoinColumn(name = "klientid")
     private Klient klient;
+    @OneToMany
+    @JoinColumn(name = "VIN")
+    private List<Naprawa> naprawa = new ArrayList<Naprawa>();
 
     public Pojazd(String rejestracja, String marka, String model, int rocznik, String VIN) {
         this.rejestracja = rejestracja;

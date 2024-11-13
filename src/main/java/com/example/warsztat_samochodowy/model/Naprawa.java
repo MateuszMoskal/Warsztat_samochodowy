@@ -14,12 +14,12 @@ public class Naprawa {
     private String stan;
     private String opis_usterki;
     private String protokol_naprawy;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "VIN", referencedColumnName = "VIN")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "VIN")
     //private String VIN; // klucz obcy
     private Pojazd pojazd;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "mechanikID", referencedColumnName = "mechanikID")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "mechanikID")
     //private int mechanik; // klucz obcy
     private Mechanik mechanik;
 
