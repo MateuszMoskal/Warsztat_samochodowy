@@ -1,11 +1,13 @@
 package com.example.warsztat_samochodowy.controller;
 
 
+import com.example.warsztat_samochodowy.dto.PojazdKlientDto;
 import com.example.warsztat_samochodowy.model.Klient;
 import com.example.warsztat_samochodowy.model.Mechanik;
 import com.example.warsztat_samochodowy.model.Naprawa;
 import com.example.warsztat_samochodowy.model.Pojazd;
 import com.example.warsztat_samochodowy.service.Warsztat_serwis;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +27,7 @@ public class WarsztatController {
         return lista_klientow;
     }
 
-    @PostMapping("/dodaj/klienta")
+    @PostMapping(value = "/dodaj/klienta", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Klient> Dodaj_klienta(@RequestBody Klient klient){
         Klient nowy_klient = warsztat_serwis.Dodawanie_klienta(klient);
         return ResponseEntity.ok(nowy_klient);
@@ -49,9 +51,9 @@ public class WarsztatController {
         return ResponseEntity.ok(nowy_mechanik);
     }
 
-    @DeleteMapping("/usun/mechanika")
-    public ResponseEntity<Mechanik> Usun_mechanika(@RequestBody Mechanik mechanik){
-        warsztat_serwis.Usuniecie_danych_mechanika(mechanik);
+    @PatchMapping("/zwolnij/mechanika")
+    public ResponseEntity<Mechanik> Zwolnij_mechanika(@RequestBody Mechanik mechanik){
+        warsztat_serwis.Zwolnienie_mechanika(mechanik);
         return ResponseEntity.ok(mechanik);
     }
 
@@ -79,8 +81,8 @@ public class WarsztatController {
     }
 
     @PostMapping("/dodaj/pojazdy")
-    public ResponseEntity<Pojazd> Dodaj_pojazd(@RequestBody Pojazd pojazd){
-        Pojazd nowy_pojazd = warsztat_serwis.Dodawanie_pojazdu(pojazd);
+    public ResponseEntity<Pojazd> Dodaj_pojazd(@RequestBody PojazdKlientDto pojazdKlientDto){
+        Pojazd nowy_pojazd = warsztat_serwis.Dodawanie_pojazdu(pojazdKlientDto.getPojazd(),pojazdKlientDto.getTelefon());
         return ResponseEntity.ok(nowy_pojazd);
     }
 
