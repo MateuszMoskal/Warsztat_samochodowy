@@ -1,4 +1,5 @@
 package com.example.warsztat_samochodowy.model;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -16,20 +17,21 @@ public class Pojazd {
     private String model;
     private int rocznik;
     @Id
-    private String VIN; // klucz podstawowy
+    private String vin; // klucz podstawowy
     @ManyToOne
     @JoinColumn(name = "klientid")
+    //@JsonManagedReference
     private Klient klient;
     @OneToMany
-    @JoinColumn(name = "VIN")
-    private List<Naprawa> naprawa = new ArrayList<Naprawa>();
+    @JoinColumn(name = "vin")
+    private List<Naprawa> naprawy = new ArrayList<Naprawa>();
 
     public Pojazd(String rejestracja, String marka, String model, int rocznik, String VIN) {
         this.rejestracja = rejestracja;
         this.marka = marka;
         this.model = model;
         this.rocznik = rocznik;
-        this.VIN = VIN;
+        this.vin = vin;
     }
 
     public Pojazd() {
@@ -76,10 +78,10 @@ public class Pojazd {
     }
 
     public String getVIN() {
-        return VIN;
+        return vin;
     }
 
     public void setVIN(String VIN) {
-        this.VIN = VIN;
+        this.vin = VIN;
     }
 }

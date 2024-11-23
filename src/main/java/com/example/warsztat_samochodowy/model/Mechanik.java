@@ -14,15 +14,18 @@ public class Mechanik {
     private String imie;
     @Column(nullable = false)
     private String nazwisko;
+    @Column(nullable = false)
+    private String czyZatrudniony;
     //private int naprawy;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "mechanikID")
     private List<Naprawa> naprawy = new ArrayList<Naprawa>();
 
 
-    public Mechanik(String nazwisko, String imie) {
-        this.nazwisko = nazwisko;
+    public Mechanik(String imie, String nazwisko) {
         this.imie = imie;
+        this.nazwisko = nazwisko;
+        this.czyZatrudniony = "TAK";
     }
 
     public Mechanik() {
@@ -50,5 +53,13 @@ public class Mechanik {
 
     public void setNazwisko(String nazwisko) {
         this.nazwisko = nazwisko;
+    }
+
+    public String getCzyZatrudniony() {
+        return czyZatrudniony;
+    }
+
+    public void setCzyZatrudniony(String czyZatrudniony) {
+        this.czyZatrudniony = czyZatrudniony;
     }
 }

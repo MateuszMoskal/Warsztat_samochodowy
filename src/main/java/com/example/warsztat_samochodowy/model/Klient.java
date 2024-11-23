@@ -1,5 +1,6 @@
 package com.example.warsztat_samochodowy.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class Klient {
     private String email;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "klientID")
+    //@JsonManagedReference
     private List<Pojazd> pojazdy = new ArrayList<>();
 
     public Klient(String imie, String nazwisko, String telefon, String email) {

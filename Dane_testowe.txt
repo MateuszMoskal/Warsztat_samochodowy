@@ -24,11 +24,14 @@ localhost:8080/pojazdy
 localhost:8080/dodaj/pojazdy
 
 {
-    "rejestracja": "DW 19831",
-    "marka": "Audi",
-    "model": "S7",
-    "rocznik": 2011,
-    "VIN": "ABSDAE221293821283"
+    "pojazd": {
+        "rejestracja": "DW 19831",
+        "marka": "Audi",
+        "model": "S7",
+        "rocznik": 2011,
+        "vin": "ABSDAE221293821283"
+    },
+    "telefonKlienta": "753289111"
 }
 
 localhost:8080/modyfikuj/dane/pojazdow
@@ -75,21 +78,20 @@ localhost:8080/dodaj/naprawe
 localhost:8080/dodaj/nowe/zgloszenie
 
 {
-    "imie": "Bozena",
-    "nazwisko": "Kowalska",
-    "telefon": "753289111",
-    "email": "bozenakowalska@gmail.com",
-    "pojazdy": [
-    {
-        "rejestracja": "DW 19831",
-        "marka": "Audi",
-        "model": "S7",
-        "rocznik": 2011,
-        "VIN": "ABSDAE221293821283"
-    }
-    ]
+     "klient": {
+         "imie": "Bozena",
+         "nazwisko": "Kowalska",
+         "telefon": "753289111",
+         "email": "bozenakowalska@gmail.com"
+     },
+     "pojazd": {
+         "rejestracja": "DW 19831",
+         "marka": "Audi",
+         "model": "S7",
+         "rocznik": 2011,
+         "vin": "ABSDAE221293821283"
+     }
 }
-
 
 localhost:8080/dodaj/nowe_zgloszenie
 

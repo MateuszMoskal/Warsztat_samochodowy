@@ -1,5 +1,6 @@
 package com.example.warsztat_samochodowy.service;
 
+import com.example.warsztat_samochodowy.dto.PojazdKlientDto;
 import com.example.warsztat_samochodowy.exception.KlientAlreadyExistException;
 import com.example.warsztat_samochodowy.model.Klient;
 import com.example.warsztat_samochodowy.model.Mechanik;
@@ -70,17 +71,21 @@ public class Warsztat_serwis {
         return listaMechanikow;
     }
     public Mechanik Dodawanie_mechanika(Mechanik mechanik){
-        try {
-            return mechanikRepository.save(mechanik);
-        } catch (Exception e) {
+        Mechanik nowyMechanik = new Mechanik(mechanik.getImie(), mechanik.getNazwisko());
+        Optional<Mechanik> mechanikWBazie = mechanikRepository.findByImieAndNazwisko(mechanik.getImie(), mechanik.getNazwisko());
+        if(mechanikWBazie.isEmpty()){
+            return mechanikRepository.save(nowyMechanik);
+        }
+        else {
             throw new KlientAlreadyExistException("Mechanik już istnieje w bazie");
         }
     }
-    public void Usuniecie_danych_mechanika(Mechanik mechanik){
+    public void Zwolnienie_mechanika(Mechanik mechanik){
         // sprawdzic czy mechanik istnieje w bazie
         Optional<Mechanik> mechanikZBazyDanych = mechanikRepository.findByImieAndNazwisko(mechanik.getImie(), mechanik.getNazwisko());
         if(mechanikZBazyDanych.isPresent()){
-            mechanikRepository.delete(mechanikZBazyDanych.get());
+            mechanikZBazyDanych.get().setCzyZatrudniony("NIE");
+            mechanikRepository.save(mechanikZBazyDanych.get());
         }
         else
         {
@@ -94,7 +99,7 @@ public class Warsztat_serwis {
         return listaNapraw;
     }
     public Naprawa Dodawanie_naprawy(Naprawa naprawa) throws SQLException {
-        Optional<Pojazd> pojazd = pojazdRepository.findByVIN(naprawa.getPojazd().getVIN());
+        Optional<Pojazd> pojazd = pojazdRepository.findByVin(naprawa.getPojazd().getVIN());
         Optional<Mechanik> mechanik = mechanikRepository.findByImieAndNazwisko(naprawa.getMechanik().getImie(), naprawa.getMechanik().getNazwisko());
         if (pojazd.isPresent() && mechanik.isPresent()) {
             return naprawaRepository.save(naprawa);
@@ -108,8 +113,9 @@ public class Warsztat_serwis {
         listaPojazdow = pojazdRepository.findAll();
         return listaPojazdow;
     }
-    public Pojazd Dodawanie_pojazdu(Pojazd pojazd){
-        Optional<Pojazd> staryPojazd = pojazdRepository.findByVIN(pojazd.getVIN());
+    public Pojazd Dodawanie_pojazdu(Pojazd pojazd, String telefon){
+        klientRepository.findByTelefon(telefon);
+        Optional<Pojazd> staryPojazd = pojazdRepository.findByVin(pojazd.getVIN());
         if(staryPojazd.isEmpty()) {
             pojazdRepository.save(pojazd);
             return pojazd;
@@ -117,7 +123,7 @@ public class Warsztat_serwis {
         return staryPojazd.get();
     }
     public void Modyfikacje_danych_pojazdu(Pojazd pojazd){
-        Optional<Pojazd> staryPojazd = pojazdRepository.findByVIN(pojazd.getVIN());
+        Optional<Pojazd> staryPojazd = pojazdRepository.findByVin(pojazd.getVIN());
 
         if(staryPojazd.isPresent()){
             staryPojazd.get().setPojazdID(pojazd.getPojazdID());
@@ -136,9 +142,22 @@ public class Warsztat_serwis {
 
     public Naprawa Dodanie_nowego_zgloszenia(Klient klient, Pojazd pojazd) throws SQLException {
 
-        Dodawanie_klienta(klient);
-        Dodawanie_pojazdu(pojazd);
-        Naprawa nowa_naprawa = new Naprawa(pojazd);
+        Optional<Klient> klientWBazie = klientRepository.findByTelefon(klient.getTelefon());
+        Optional<Pojazd> pojazdWBazie = pojazdRepository.findByVin(pojazd.getVIN());
+        if (klientWBazie.isEmpty()){
+            Dodawanie_klienta(klient);
+        }
+
+        Naprawa nowa_naprawa;
+
+        if (pojazdWBazie.isEmpty()){
+            Pojazd zapisanyPojazd = Dodawanie_pojazdu(pojazd, klient.getTelefon());
+            nowa_naprawa = new Naprawa(zapisanyPojazd);
+        }
+        else {
+            nowa_naprawa = new Naprawa(pojazdWBazie.get());
+        }
+
         Dodawanie_naprawy(nowa_naprawa);
         return nowa_naprawa;
     }
