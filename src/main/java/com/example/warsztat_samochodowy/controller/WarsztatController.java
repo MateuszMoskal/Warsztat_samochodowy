@@ -1,7 +1,9 @@
 package com.example.warsztat_samochodowy.controller;
 
 
+import com.example.warsztat_samochodowy.dto.NaprawaDto;
 import com.example.warsztat_samochodowy.dto.PojazdKlientDto;
+import com.example.warsztat_samochodowy.dto.ZgloszenieDto;
 import com.example.warsztat_samochodowy.model.Klient;
 import com.example.warsztat_samochodowy.model.Mechanik;
 import com.example.warsztat_samochodowy.model.Naprawa;
@@ -63,15 +65,10 @@ public class WarsztatController {
         return lista_napraw;
     }
 
-    @PostMapping("/dodaj/naprawe")
-    public ResponseEntity<Naprawa> Dodaj_naprawe(@RequestBody Naprawa naprawa){
-        try{
-            Naprawa nowa_naprawa = warsztat_serwis.Dodawanie_naprawy(naprawa);
-            return ResponseEntity.ok(nowa_naprawa);
-        }
-        catch(Exception e){
-            return ResponseEntity.badRequest().body(naprawa);
-        }
+    @PatchMapping("/przyjecie/naprawy")
+    public ResponseEntity<Naprawa> Przyjecie_naprawy(@RequestBody NaprawaDto naprawaDto){
+        Naprawa nowa_naprawa = warsztat_serwis.Dodanie_mechanika_do_naprawy(naprawaDto);
+        return ResponseEntity.ok(nowa_naprawa);
     }
 
     @GetMapping("/pojazdy")
@@ -82,7 +79,7 @@ public class WarsztatController {
 
     @PostMapping("/dodaj/pojazdy")
     public ResponseEntity<Pojazd> Dodaj_pojazd(@RequestBody PojazdKlientDto pojazdKlientDto){
-        Pojazd nowy_pojazd = warsztat_serwis.Dodawanie_pojazdu(pojazdKlientDto.getPojazd(),pojazdKlientDto.getTelefon());
+        Pojazd nowy_pojazd = warsztat_serwis.Dodawanie_pojazdu(pojazdKlientDto.getPojazd(),pojazdKlientDto.getTelefonKlienta());
         return ResponseEntity.ok(nowy_pojazd);
     }
 
@@ -93,13 +90,10 @@ public class WarsztatController {
     }
 
     @PostMapping("/dodaj/nowe/zgloszenie")
-    public ResponseEntity<Naprawa> Nowe_zgloszenie(@RequestBody Klient klient, Pojazd pojazd){
-        try{
-            Naprawa naprawa = warsztat_serwis.Dodanie_nowego_zgloszenia(klient, pojazd);
-            return ResponseEntity.ok(naprawa);
-        }
-        catch(Exception e){
-            return ResponseEntity.badRequest().body(null);
-        }
+    public ResponseEntity<Naprawa> Nowe_zgloszenie(@RequestBody ZgloszenieDto zgloszenie) {
+
+        Naprawa naprawa = warsztat_serwis.Dodanie_nowego_zgloszenia(zgloszenie.getKlient(), zgloszenie.getPojazd());
+        return ResponseEntity.ok(naprawa);
+
     }
 }

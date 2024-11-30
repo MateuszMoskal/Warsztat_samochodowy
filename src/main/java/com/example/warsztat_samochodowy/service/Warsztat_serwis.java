@@ -1,7 +1,8 @@
 package com.example.warsztat_samochodowy.service;
 
 import com.example.warsztat_samochodowy.dto.PojazdKlientDto;
-import com.example.warsztat_samochodowy.exception.KlientAlreadyExistException;
+import com.example.warsztat_samochodowy.dto.NaprawaDto;
+import com.example.warsztat_samochodowy.exception.*;
 import com.example.warsztat_samochodowy.model.Klient;
 import com.example.warsztat_samochodowy.model.Mechanik;
 import com.example.warsztat_samochodowy.model.Naprawa;
@@ -98,14 +99,22 @@ public class Warsztat_serwis {
         listaNapraw = naprawaRepository.findAll();
         return listaNapraw;
     }
-    public Naprawa Dodawanie_naprawy(Naprawa naprawa) throws SQLException {
-        Optional<Pojazd> pojazd = pojazdRepository.findByVin(naprawa.getPojazd().getVIN());
-        Optional<Mechanik> mechanik = mechanikRepository.findByImieAndNazwisko(naprawa.getMechanik().getImie(), naprawa.getMechanik().getNazwisko());
-        if (pojazd.isPresent() && mechanik.isPresent()) {
-            return naprawaRepository.save(naprawa);
-        } else {
-            throw new SQLException("Nie udalo sie utworzyc naprawy");
+    public Naprawa Dodanie_mechanika_do_naprawy(NaprawaDto naprawaDto) {
+        //Optional<Pojazd> pojazd = pojazdRepository.findByVin(naprawaDto.getPojazd().getVIN());
+        Optional<Mechanik> mechanik = mechanikRepository.findByImieAndNazwisko(naprawaDto.getMechanik().getImie(), naprawaDto.getMechanik().getNazwisko());
+        if (mechanik.isEmpty()) {
+            throw new MechanikNotFoundError("Nie znalezniono mechanika z podanym imieniem i nazwiskiem");
         }
+        Optional<Naprawa> naprawa = naprawaRepository.findById(naprawaDto.getNaprawaID());
+        if (naprawa.isEmpty()) {
+            throw new NaprawaNotFoundError("Nie znaleziono podanej naprawy. Nie udało się dodać mechanika");
+        }
+        naprawa.get().setMechanik(mechanik.get());
+        return naprawaRepository.save(naprawa.get());
+    }
+
+    public Naprawa Dodawanie_naprawy(Naprawa naprawa) {
+        return naprawaRepository.save(naprawa);
     }
     public List<Pojazd>Podglad_pojazdow(){
 
@@ -114,13 +123,17 @@ public class Warsztat_serwis {
         return listaPojazdow;
     }
     public Pojazd Dodawanie_pojazdu(Pojazd pojazd, String telefon){
-        klientRepository.findByTelefon(telefon);
+        Optional<Klient> klient = klientRepository.findByTelefon(telefon);
         Optional<Pojazd> staryPojazd = pojazdRepository.findByVin(pojazd.getVIN());
-        if(staryPojazd.isEmpty()) {
-            pojazdRepository.save(pojazd);
-            return pojazd;
+        if(staryPojazd.isPresent()){
+            throw new PojazdAlreadyExistError("Pojazd z podanym numerem VIN istnieje już w bazie");
         }
-        return staryPojazd.get();
+        if (klient.isEmpty()) {
+            throw new KlientNotFoundError("Klient z podanym telefonem nie istnieje w bazie");
+        }
+        pojazd.setKlient(klient.get());
+        return pojazdRepository.save(pojazd);
+
     }
     public void Modyfikacje_danych_pojazdu(Pojazd pojazd){
         Optional<Pojazd> staryPojazd = pojazdRepository.findByVin(pojazd.getVIN());
@@ -140,26 +153,23 @@ public class Warsztat_serwis {
 
     }
 
-    public Naprawa Dodanie_nowego_zgloszenia(Klient klient, Pojazd pojazd) throws SQLException {
+    public Naprawa Dodanie_nowego_zgloszenia(Klient klient, Pojazd pojazd) {
 
         Optional<Klient> klientWBazie = klientRepository.findByTelefon(klient.getTelefon());
         Optional<Pojazd> pojazdWBazie = pojazdRepository.findByVin(pojazd.getVIN());
-        if (klientWBazie.isEmpty()){
-            Dodawanie_klienta(klient);
-        }
-
+        Klient savedKlient = klientWBazie.orElseGet(() -> Dodawanie_klienta(klient));
         Naprawa nowa_naprawa;
-
-        if (pojazdWBazie.isEmpty()){
-            Pojazd zapisanyPojazd = Dodawanie_pojazdu(pojazd, klient.getTelefon());
-            nowa_naprawa = new Naprawa(zapisanyPojazd);
-        }
-        else {
+        if (pojazdWBazie.isEmpty()) {
+            Pojazd savedPojazd = Dodawanie_pojazdu(pojazd, klient.getTelefon());// Dodawanie_pojazdu(pojazd, klient);
+            nowa_naprawa = new Naprawa(savedPojazd);
+        } else {
+            if (!pojazdWBazie.get().getKlient().getTelefon().equals(savedKlient.getTelefon())) {
+                throw new KlientAlreadyExistException("Pojazd posiada już właściciela z innym numerem telefonu");
+            }
             nowa_naprawa = new Naprawa(pojazdWBazie.get());
         }
 
-        Dodawanie_naprawy(nowa_naprawa);
-        return nowa_naprawa;
+        return Dodawanie_naprawy(nowa_naprawa);
     }
 
 }
