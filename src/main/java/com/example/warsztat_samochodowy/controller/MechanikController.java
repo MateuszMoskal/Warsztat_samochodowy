@@ -16,36 +16,34 @@ public class MechanikController {
     private final Mechanik_serwis mechanik_serwis;
 
     public MechanikController(Mechanik_serwis mechanik_serwis) {
+
         this.mechanik_serwis = mechanik_serwis;
     }
 
     @PostMapping("/dodaj/nowe_zgloszenie")
     public ResponseEntity<Naprawa> Nowe_zgloszenie(@RequestBody Naprawa naprawa, Mechanik mechanik){
-        try{
-            Naprawa zaakceptowana_naprawa = mechanik_serwis.Przyjecie_naprawy(naprawa, mechanik);
-            return ResponseEntity.ok(zaakceptowana_naprawa);
-        }
-        catch(Exception e){
-            return ResponseEntity.badRequest().body(naprawa);
-        }
+
+        Naprawa zaakceptowana_naprawa = mechanik_serwis.Przyjecie_naprawy(naprawa, mechanik);
+        return ResponseEntity.ok(zaakceptowana_naprawa);
+
     }
 
     @PatchMapping("/modyfikuj/opis_usterki")
-    public ResponseEntity<Naprawa> Modyfikacja_opisu_usterki(@RequestBody int NaprawaID, String opis_usterki, String stan, String protokol_naprawy){
-        Naprawa naprawa = mechanik_serwis.Modyfikacja_opisu_usterki(NaprawaID, opis_usterki, stan, protokol_naprawy);
-        return ResponseEntity.ok(naprawa);
+    public ResponseEntity<Naprawa> Modyfikacja_opisu_usterki(@RequestBody Naprawa naprawa){
+        Naprawa nowaNaprawa = mechanik_serwis.Modyfikacja_opisu_usterki(naprawa.getNaprawaID(), naprawa.getOpis_usterki(), naprawa.getStan(), naprawa.getProtokol_naprawy());
+        return ResponseEntity.ok(nowaNaprawa);
     }
 
     @PatchMapping("/modyfikuj/rozpoczecie_naprawy")
-    public ResponseEntity<Naprawa> Rozpoczecie_naprawy(@RequestBody int NaprawaID, Date data_rozpoczecia){
-        Naprawa naprawa = mechanik_serwis.Rozpoczecie_naprawy(NaprawaID, data_rozpoczecia);
-        return ResponseEntity.ok(naprawa);
+    public ResponseEntity<Naprawa> Rozpoczecie_naprawy(@RequestBody Naprawa naprawa){
+        Naprawa nowaNaprawa = mechanik_serwis.Rozpoczecie_naprawy(naprawa.getNaprawaID(), naprawa.getData_rozpoczecia());
+        return ResponseEntity.ok(nowaNaprawa);
     }
 
     @PatchMapping("/modyfikuj/zakonczenie_naprawy")
-    public ResponseEntity<Naprawa> Zakonczenie_naprawy(@RequestBody int NaprawaID, Date data_zakonczenia){
-        Naprawa naprawa = mechanik_serwis.Rozpoczecie_naprawy(NaprawaID, data_zakonczenia);
-        return ResponseEntity.ok(naprawa);
+    public ResponseEntity<Naprawa> Zakonczenie_naprawy(@RequestBody Naprawa naprawa){
+        Naprawa nowaNaprawa = mechanik_serwis.Przewidywany_czas_naprawy(naprawa.getNaprawaID(), naprawa.getData_zakonczenia());
+        return ResponseEntity.ok(nowaNaprawa);
     }
 
 

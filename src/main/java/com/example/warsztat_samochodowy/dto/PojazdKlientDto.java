@@ -4,13 +4,13 @@ import com.example.warsztat_samochodowy.model.Pojazd;
 
 public class PojazdKlientDto {
     private Pojazd pojazd;
-    private String telefon;
+    private String telefonKlienta;
 
     public Pojazd getPojazd() {
         return pojazd;
     }
 
-    public String getTelefon() {
-        return telefon;
+    public String getTelefonKlienta() {
+        return telefonKlienta;
     }
 }

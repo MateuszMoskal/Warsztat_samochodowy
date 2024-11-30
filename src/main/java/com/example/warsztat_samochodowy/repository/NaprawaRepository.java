@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface NaprawaRepository extends JpaRepository<Naprawa, String> {
+public interface NaprawaRepository extends JpaRepository<Naprawa, Integer> {
 
 
     Optional<Naprawa> findByNaprawaID(int naprawaID);

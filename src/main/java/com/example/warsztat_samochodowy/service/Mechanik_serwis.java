@@ -4,6 +4,7 @@ import com.example.warsztat_samochodowy.model.Klient;
 import com.example.warsztat_samochodowy.model.Mechanik;
 import com.example.warsztat_samochodowy.model.Naprawa;
 import com.example.warsztat_samochodowy.model.Pojazd;
+import com.example.warsztat_samochodowy.repository.MechanikRepository;
 import com.example.warsztat_samochodowy.repository.NaprawaRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,12 @@ import java.util.Optional;
 public class Mechanik_serwis {
 
     private NaprawaRepository naprawaRepository;
-    private Warsztat_serwis warsztat_serwis;
+    private MechanikRepository mechanikRepository;
+
+    public Mechanik_serwis(NaprawaRepository naprawaRepository, MechanikRepository mechanikRepository) {
+        this.naprawaRepository = naprawaRepository;
+        this.mechanikRepository = mechanikRepository;
+    }
 
     public List<Naprawa> Podglad_napraw(){
 
@@ -69,7 +75,7 @@ public class Mechanik_serwis {
 
         if(staraNaprawa.isPresent()){
 
-            staraNaprawa.get().setData_rozpoczecia(data_zakonczenia);
+            staraNaprawa.get().setData_zakonczenia(data_zakonczenia);
         }
 
         naprawaRepository.save(staraNaprawa.get());

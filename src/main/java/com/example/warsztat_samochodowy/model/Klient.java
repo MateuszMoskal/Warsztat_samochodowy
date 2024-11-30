@@ -24,7 +24,7 @@ public class Klient {
     private String email;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "klientID")
-    //@JsonManagedReference
+    @JsonManagedReference
     private List<Pojazd> pojazdy = new ArrayList<>();
 
     public Klient(String imie, String nazwisko, String telefon, String email) {
