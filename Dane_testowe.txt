@@ -10,7 +10,7 @@ localhost:8080/dodaj/klienta
 
 localhost:8080/klienci
 
-localhost:8080/modyfikuj/dane/klienta #zwraca id = 0
+localhost:8080/modyfikuj/dane/klienta #admin
 
 {
     "imie": "Bozena",
