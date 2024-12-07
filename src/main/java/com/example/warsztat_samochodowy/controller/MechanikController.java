@@ -36,13 +36,13 @@ public class MechanikController {
 
     @PatchMapping("/modyfikuj/rozpoczecie_naprawy")
     public ResponseEntity<Naprawa> Rozpoczecie_naprawy(@RequestBody Naprawa naprawa){
-        Naprawa nowaNaprawa = mechanik_serwis.Rozpoczecie_naprawy(naprawa.getNaprawaID(), naprawa.getData_rozpoczecia());
+        Naprawa nowaNaprawa = mechanik_serwis.Rozpoczecie_naprawy(naprawa);
         return ResponseEntity.ok(nowaNaprawa);
     }
 
     @PatchMapping("/modyfikuj/zakonczenie_naprawy")
     public ResponseEntity<Naprawa> Zakonczenie_naprawy(@RequestBody Naprawa naprawa){
-        Naprawa nowaNaprawa = mechanik_serwis.Przewidywany_czas_naprawy(naprawa.getNaprawaID(), naprawa.getData_zakonczenia());
+        Naprawa nowaNaprawa = mechanik_serwis.Przewidywany_czas_naprawy(naprawa);
         return ResponseEntity.ok(nowaNaprawa);
     }
 
