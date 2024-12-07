@@ -1,15 +1,14 @@
 package com.example.warsztat_samochodowy.service;
 
-import com.example.warsztat_samochodowy.model.Klient;
+import com.example.warsztat_samochodowy.exception.DataToEarlyException;
+import com.example.warsztat_samochodowy.exception.NaprawaNotFoundException;
 import com.example.warsztat_samochodowy.model.Mechanik;
 import com.example.warsztat_samochodowy.model.Naprawa;
-import com.example.warsztat_samochodowy.model.Pojazd;
 import com.example.warsztat_samochodowy.repository.MechanikRepository;
 import com.example.warsztat_samochodowy.repository.NaprawaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,18 +49,20 @@ public class Mechanik_serwis {
             staraNaprawa.get().setStan(stan);
             staraNaprawa.get().setProtokol_naprawy(protokol_naprawy);
         }
-
+        else {
+            throw new NaprawaNotFoundException("Nie znaleziono naprawy z takim ID");
+        }
         naprawaRepository.save(staraNaprawa.get());
         return staraNaprawa.get();
     }
 
-    public Naprawa Rozpoczecie_naprawy(int NaprawaID, Date data_rozpoczecia){
+    public Naprawa Rozpoczecie_naprawy(Naprawa naprawa){
 
-        Optional<Naprawa> staraNaprawa = naprawaRepository.findByNaprawaID(NaprawaID);
+        Optional<Naprawa> staraNaprawa = naprawaRepository.findByNaprawaID(naprawa.getNaprawaID());
 
         if(staraNaprawa.isPresent()){
 
-            staraNaprawa.get().setData_rozpoczecia(data_rozpoczecia);
+            staraNaprawa.get().setData_rozpoczecia(naprawa.getData_rozpoczecia());
         }
 
         naprawaRepository.save(staraNaprawa.get());
@@ -69,15 +70,17 @@ public class Mechanik_serwis {
 
     }
 
-    public Naprawa Przewidywany_czas_naprawy(int NaprawaID, Date data_zakonczenia){
+    public Naprawa Przewidywany_czas_naprawy(Naprawa naprawa){
 
-        Optional<Naprawa> staraNaprawa = naprawaRepository.findByNaprawaID(NaprawaID);
+        Optional<Naprawa> staraNaprawa = naprawaRepository.findByNaprawaID(naprawa.getNaprawaID());
 
-        if(staraNaprawa.isPresent()){
-
-            staraNaprawa.get().setData_zakonczenia(data_zakonczenia);
+        if (staraNaprawa.isEmpty()) {
+            throw new NaprawaNotFoundException("Nie znalezniono podanej naprawy w bazie");
         }
-
+        staraNaprawa.get().setData_zakonczenia(naprawa.getData_zakonczenia());
+        if (naprawa.getData_zakonczenia().before(staraNaprawa.get().getData_rozpoczecia())) {
+            throw new DataToEarlyException("Data zakończenia nie może być wcześniejsza niż data rozpoczęcia");
+        }
         naprawaRepository.save(staraNaprawa.get());
         return staraNaprawa.get();
     }

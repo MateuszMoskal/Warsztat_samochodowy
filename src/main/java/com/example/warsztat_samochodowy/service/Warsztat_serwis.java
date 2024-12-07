@@ -1,6 +1,5 @@
 package com.example.warsztat_samochodowy.service;
 
-import com.example.warsztat_samochodowy.dto.PojazdKlientDto;
 import com.example.warsztat_samochodowy.dto.NaprawaDto;
 import com.example.warsztat_samochodowy.exception.*;
 import com.example.warsztat_samochodowy.model.Klient;
@@ -14,7 +13,6 @@ import com.example.warsztat_samochodowy.repository.PojazdRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +60,7 @@ public class Warsztat_serwis {
         }
         else
         {
-            throw new EntityNotFoundException("Klient nie istnieje w bazie");
+            throw new KlientNotFoundException("Klient nie istnieje w bazie");
         }
 
     }
@@ -78,7 +76,7 @@ public class Warsztat_serwis {
             return mechanikRepository.save(nowyMechanik);
         }
         else {
-            throw new KlientAlreadyExistException("Mechanik już istnieje w bazie");
+            throw new MechanikAlreadyExistException("Mechanik już istnieje w bazie");
         }
     }
     public void Zwolnienie_mechanika(Mechanik mechanik){
@@ -90,7 +88,7 @@ public class Warsztat_serwis {
         }
         else
         {
-            throw new EntityNotFoundException("Mechanik nie istnieje w bazie");
+            throw new MechanikNotFoundException("Mechanik nie istnieje w bazie");
         }
     }
     public List<Naprawa>Podglad_napraw(){
@@ -103,11 +101,11 @@ public class Warsztat_serwis {
         //Optional<Pojazd> pojazd = pojazdRepository.findByVin(naprawaDto.getPojazd().getVIN());
         Optional<Mechanik> mechanik = mechanikRepository.findByImieAndNazwisko(naprawaDto.getMechanik().getImie(), naprawaDto.getMechanik().getNazwisko());
         if (mechanik.isEmpty()) {
-            throw new MechanikNotFoundError("Nie znalezniono mechanika z podanym imieniem i nazwiskiem");
+            throw new MechanikNotFoundException("Nie znalezniono mechanika z podanym imieniem i nazwiskiem");
         }
         Optional<Naprawa> naprawa = naprawaRepository.findById(naprawaDto.getNaprawaID());
         if (naprawa.isEmpty()) {
-            throw new NaprawaNotFoundError("Nie znaleziono podanej naprawy. Nie udało się dodać mechanika");
+            throw new NaprawaNotFoundException("Nie znaleziono podanej naprawy. Nie udało się dodać mechanika");
         }
         naprawa.get().setMechanik(mechanik.get());
         return naprawaRepository.save(naprawa.get());
@@ -126,10 +124,10 @@ public class Warsztat_serwis {
         Optional<Klient> klient = klientRepository.findByTelefon(telefon);
         Optional<Pojazd> staryPojazd = pojazdRepository.findByVin(pojazd.getVIN());
         if(staryPojazd.isPresent()){
-            throw new PojazdAlreadyExistError("Pojazd z podanym numerem VIN istnieje już w bazie");
+            throw new PojazdAlreadyExistException("Pojazd z podanym numerem VIN istnieje już w bazie");
         }
         if (klient.isEmpty()) {
-            throw new KlientNotFoundError("Klient z podanym telefonem nie istnieje w bazie");
+            throw new KlientNotFoundException("Klient z podanym telefonem nie istnieje w bazie");
         }
         pojazd.setKlient(klient.get());
         return pojazdRepository.save(pojazd);
@@ -148,7 +146,7 @@ public class Warsztat_serwis {
         }
         else
         {
-            throw new EntityNotFoundException("Pojazd nie istnieje w bazie");
+            throw new PojazdNotFoundException("Pojazd nie istnieje w bazie");
         }
 
     }

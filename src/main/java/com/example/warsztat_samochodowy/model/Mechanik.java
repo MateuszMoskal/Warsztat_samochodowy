@@ -16,6 +16,10 @@ public class Mechanik {
     private String nazwisko;
     @Column(nullable = false)
     private String czyZatrudniony;
+    @Column(nullable = false)
+    private String login;
+    @Column(nullable = false)
+    private String haslo;
     //private int naprawy;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "mechanikID")
@@ -61,5 +65,21 @@ public class Mechanik {
 
     public void setCzyZatrudniony(String czyZatrudniony) {
         this.czyZatrudniony = czyZatrudniony;
+    }
+
+    public String getHaslo() {
+        return haslo;
+    }
+
+    public void setHaslo(String haslo) {
+        this.haslo = haslo;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 }
