@@ -14,6 +14,7 @@ public class Naprawa {
     private String stan;
     private String opis_usterki;
     private String protokol_naprawy;
+    private String telefon_klienta;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "VIN")
     //private String VIN; // klucz obcy
@@ -26,10 +27,12 @@ public class Naprawa {
     public Naprawa(Pojazd pojazd, Mechanik mechanik) {
         this.pojazd = pojazd;
         this.mechanik = mechanik;
+        this.telefon_klienta = pojazd.getKlient().getTelefon();
     }
 
     public Naprawa(Pojazd pojazd) {
         this.pojazd = pojazd;
+        this.telefon_klienta = pojazd.getKlient().getTelefon();
     }
 
     public Naprawa() {
@@ -97,5 +100,13 @@ public class Naprawa {
 
     public void setMechanik(Mechanik mechanik) {
         this.mechanik = mechanik;
+    }
+
+    public String getTelefon_klienta() {
+        return telefon_klienta;
+    }
+
+    public void setTelefon_klienta(String telefon_klienta) {
+        this.telefon_klienta = telefon_klienta;
     }
 }

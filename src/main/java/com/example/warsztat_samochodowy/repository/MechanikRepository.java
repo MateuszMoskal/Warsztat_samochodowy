@@ -12,4 +12,5 @@ public interface MechanikRepository extends JpaRepository<Mechanik, String> {
 
 
     Optional<Mechanik> findByImieAndNazwisko(String imie, String nazwisko);
+    Optional<Mechanik> findByLogin(String login);
 }

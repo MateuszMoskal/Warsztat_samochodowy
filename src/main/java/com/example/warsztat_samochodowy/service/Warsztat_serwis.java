@@ -11,6 +11,8 @@ import com.example.warsztat_samochodowy.repository.MechanikRepository;
 import com.example.warsztat_samochodowy.repository.NaprawaRepository;
 import com.example.warsztat_samochodowy.repository.PojazdRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,12 +28,14 @@ public class Warsztat_serwis {
     private MechanikRepository mechanikRepository;
     private NaprawaRepository naprawaRepository;
     private PojazdRepository pojazdRepository;
+    private PasswordEncoder passwordEncoder;
 
-    public Warsztat_serwis(KlientRepository klientRepository, MechanikRepository mechanikRepository, NaprawaRepository naprawaRepository, PojazdRepository pojazdRepository) {
+    public Warsztat_serwis(KlientRepository klientRepository, MechanikRepository mechanikRepository, NaprawaRepository naprawaRepository, PojazdRepository pojazdRepository, PasswordEncoder passwordEncoder) {
         this.klientRepository = klientRepository;
         this.mechanikRepository = mechanikRepository;
         this.naprawaRepository = naprawaRepository;
         this.pojazdRepository = pojazdRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Klient>Podglad_klientow(){
@@ -40,11 +44,11 @@ public class Warsztat_serwis {
         return listaKlientow;
     }
     public Klient Dodawanie_klienta(Klient klient) {
-        try {
-            return klientRepository.save(klient);
-        } catch (Exception e) {
+        Optional<Klient> staryKlient = klientRepository.findByTelefon(klient.getTelefon());
+        if (staryKlient.isPresent()) {
             throw new KlientAlreadyExistException("Klient z podanym numerem telefonu już istnieje w bazie");
         }
+        return klientRepository.save(klient);
     }
 
     public Klient Modyfikacje_danych_klienta(Klient klient){
@@ -70,8 +74,8 @@ public class Warsztat_serwis {
         return listaMechanikow;
     }
     public Mechanik Dodawanie_mechanika(Mechanik mechanik){
-        Mechanik nowyMechanik = new Mechanik(mechanik.getImie(), mechanik.getNazwisko());
-        Optional<Mechanik> mechanikWBazie = mechanikRepository.findByImieAndNazwisko(mechanik.getImie(), mechanik.getNazwisko());
+        Mechanik nowyMechanik = new Mechanik(mechanik.getImie(), mechanik.getNazwisko(), mechanik.getLogin(), mechanik.getHaslo());
+        Optional<Mechanik> mechanikWBazie = mechanikRepository.findByLogin(mechanik.getLogin());
         if(mechanikWBazie.isEmpty()){
             return mechanikRepository.save(nowyMechanik);
         }
@@ -79,12 +83,13 @@ public class Warsztat_serwis {
             throw new MechanikAlreadyExistException("Mechanik już istnieje w bazie");
         }
     }
-    public void Zwolnienie_mechanika(Mechanik mechanik){
+    public Mechanik Zwolnienie_mechanika(Mechanik mechanik){
         // sprawdzic czy mechanik istnieje w bazie
-        Optional<Mechanik> mechanikZBazyDanych = mechanikRepository.findByImieAndNazwisko(mechanik.getImie(), mechanik.getNazwisko());
+        Optional<Mechanik> mechanikZBazyDanych = mechanikRepository.findByLogin(mechanik.getLogin());
         if(mechanikZBazyDanych.isPresent()){
             mechanikZBazyDanych.get().setCzyZatrudniony("NIE");
             mechanikRepository.save(mechanikZBazyDanych.get());
+            return mechanikZBazyDanych.get();
         }
         else
         {
@@ -99,9 +104,9 @@ public class Warsztat_serwis {
     }
     public Naprawa Dodanie_mechanika_do_naprawy(NaprawaDto naprawaDto) {
         //Optional<Pojazd> pojazd = pojazdRepository.findByVin(naprawaDto.getPojazd().getVIN());
-        Optional<Mechanik> mechanik = mechanikRepository.findByImieAndNazwisko(naprawaDto.getMechanik().getImie(), naprawaDto.getMechanik().getNazwisko());
+        Optional<Mechanik> mechanik = mechanikRepository.findByLogin(naprawaDto.getMechanik().getLogin());
         if (mechanik.isEmpty()) {
-            throw new MechanikNotFoundException("Nie znalezniono mechanika z podanym imieniem i nazwiskiem");
+            throw new MechanikNotFoundException("Nie znalezniono mechanika z podanym loginem");
         }
         Optional<Naprawa> naprawa = naprawaRepository.findById(naprawaDto.getNaprawaID());
         if (naprawa.isEmpty()) {
