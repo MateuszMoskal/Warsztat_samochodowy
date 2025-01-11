@@ -26,10 +26,12 @@ public class Mechanik {
     private List<Naprawa> naprawy = new ArrayList<Naprawa>();
 
 
-    public Mechanik(String imie, String nazwisko) {
+    public Mechanik(String imie, String nazwisko, String login, String haslo) {
         this.imie = imie;
         this.nazwisko = nazwisko;
         this.czyZatrudniony = "TAK";
+        this.login = login;
+        this.haslo = haslo;
     }
 
     public Mechanik() {
