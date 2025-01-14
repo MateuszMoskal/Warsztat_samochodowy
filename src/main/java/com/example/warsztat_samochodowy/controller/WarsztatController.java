@@ -65,12 +65,6 @@ public class WarsztatController {
         return lista_napraw;
     }
 
-    @PatchMapping("/przyjecie/naprawy")
-    public ResponseEntity<Naprawa> Przyjecie_naprawy(@RequestBody NaprawaDto naprawaDto){
-        Naprawa nowa_naprawa = warsztat_serwis.Dodanie_mechanika_do_naprawy(naprawaDto);
-        return ResponseEntity.ok(nowa_naprawa);
-    }
-
     @GetMapping("/pojazdy")
     public List<Pojazd> Wyswietl_pojazd(){
         List<Pojazd> lista_pojazdow = warsztat_serwis.Podglad_pojazdow();

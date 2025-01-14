@@ -1,6 +1,8 @@
 package com.example.warsztat_samochodowy.service;
 
+import com.example.warsztat_samochodowy.dto.NaprawaDto;
 import com.example.warsztat_samochodowy.exception.DataToEarlyException;
+import com.example.warsztat_samochodowy.exception.MechanikNotFoundException;
 import com.example.warsztat_samochodowy.exception.NaprawaNotFoundException;
 import com.example.warsztat_samochodowy.model.Mechanik;
 import com.example.warsztat_samochodowy.model.Naprawa;
@@ -68,6 +70,20 @@ public class Mechanik_serwis {
         naprawaRepository.save(staraNaprawa.get());
         return staraNaprawa.get();
 
+    }
+
+    public Naprawa Dodanie_mechanika_do_naprawy(NaprawaDto naprawaDto) {
+        //Optional<Pojazd> pojazd = pojazdRepository.findByVin(naprawaDto.getPojazd().getVIN());
+        Optional<Mechanik> mechanik = mechanikRepository.findByLogin(naprawaDto.getMechanikLogin());
+        if (mechanik.isEmpty()) {
+            throw new MechanikNotFoundException("Nie znalezniono mechanika z podanym loginem");
+        }
+        Optional<Naprawa> naprawa = naprawaRepository.findById(naprawaDto.getNaprawaID());
+        if (naprawa.isEmpty()) {
+            throw new NaprawaNotFoundException("Nie znaleziono podanej naprawy. Nie udało się dodać mechanika");
+        }
+        naprawa.get().setMechanik(mechanik.get());
+        return naprawaRepository.save(naprawa.get());
     }
 
     public Naprawa Przewidywany_czas_naprawy(Naprawa naprawa){
