@@ -102,19 +102,6 @@ public class Warsztat_serwis {
         listaNapraw = naprawaRepository.findAll();
         return listaNapraw;
     }
-    public Naprawa Dodanie_mechanika_do_naprawy(NaprawaDto naprawaDto) {
-        //Optional<Pojazd> pojazd = pojazdRepository.findByVin(naprawaDto.getPojazd().getVIN());
-        Optional<Mechanik> mechanik = mechanikRepository.findByLogin(naprawaDto.getMechanik().getLogin());
-        if (mechanik.isEmpty()) {
-            throw new MechanikNotFoundException("Nie znalezniono mechanika z podanym loginem");
-        }
-        Optional<Naprawa> naprawa = naprawaRepository.findById(naprawaDto.getNaprawaID());
-        if (naprawa.isEmpty()) {
-            throw new NaprawaNotFoundException("Nie znaleziono podanej naprawy. Nie udało się dodać mechanika");
-        }
-        naprawa.get().setMechanik(mechanik.get());
-        return naprawaRepository.save(naprawa.get());
-    }
 
     public Naprawa Dodawanie_naprawy(Naprawa naprawa) {
         return naprawaRepository.save(naprawa);

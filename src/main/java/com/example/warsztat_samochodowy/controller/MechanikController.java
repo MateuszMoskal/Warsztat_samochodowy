@@ -1,5 +1,6 @@
 package com.example.warsztat_samochodowy.controller;
 
+import com.example.warsztat_samochodowy.dto.NaprawaDto;
 import com.example.warsztat_samochodowy.model.Klient;
 import com.example.warsztat_samochodowy.model.Mechanik;
 import com.example.warsztat_samochodowy.model.Naprawa;
@@ -20,12 +21,18 @@ public class MechanikController {
         this.mechanik_serwis = mechanik_serwis;
     }
 
-    @PostMapping("/dodaj/nowe_zgloszenie")
-    public ResponseEntity<Naprawa> Nowe_zgloszenie(@RequestBody Naprawa naprawa, Mechanik mechanik){
+//    @PostMapping("/dodaj/nowe_zgloszenie")
+//    public ResponseEntity<Naprawa> Nowe_zgloszenie(@RequestBody Naprawa naprawa, Mechanik mechanik){
+//
+//        Naprawa zaakceptowana_naprawa = mechanik_serwis.Przyjecie_naprawy(naprawa, mechanik);
+//        return ResponseEntity.ok(zaakceptowana_naprawa);
+//
+//    }
 
-        Naprawa zaakceptowana_naprawa = mechanik_serwis.Przyjecie_naprawy(naprawa, mechanik);
-        return ResponseEntity.ok(zaakceptowana_naprawa);
-
+    @PatchMapping("/przyjecie/naprawy")
+    public ResponseEntity<Naprawa> Przyjecie_naprawy(@RequestBody NaprawaDto naprawaDto){
+        Naprawa nowa_naprawa = mechanik_serwis.Dodanie_mechanika_do_naprawy(naprawaDto);
+        return ResponseEntity.ok(nowa_naprawa);
     }
 
     @PatchMapping("/modyfikuj/opis_usterki")

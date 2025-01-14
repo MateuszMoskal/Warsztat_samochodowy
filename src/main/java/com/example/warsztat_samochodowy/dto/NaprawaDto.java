@@ -3,24 +3,20 @@ package com.example.warsztat_samochodowy.dto;
 import com.example.warsztat_samochodowy.model.Mechanik;
 
 public class NaprawaDto {
-    private Mechanik mechanik;
+    private String mechanikLogin;
     private int naprawaID;
 
-    public NaprawaDto(int naprawaID) {
+    public NaprawaDto(String mechanikLogin, int naprawaID) {
+        this.mechanikLogin = mechanikLogin;
         this.naprawaID = naprawaID;
     }
 
-    public NaprawaDto(Mechanik mechanik, int naprawaID) {
-        this.mechanik = mechanik;
-        this.naprawaID = naprawaID;
+    public String getMechanikLogin() {
+        return mechanikLogin;
     }
 
-    public Mechanik getMechanik() {
-        return mechanik;
-    }
-
-    public void setMechanik(Mechanik mechanik) {
-        this.mechanik = mechanik;
+    public void setMechanikLogin(String mechanikLogin) {
+        this.mechanikLogin = mechanikLogin;
     }
 
     public int getNaprawaID() {
