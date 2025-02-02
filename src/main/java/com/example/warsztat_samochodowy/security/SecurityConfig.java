@@ -67,10 +67,10 @@ public class SecurityConfig implements UserDetailsService {
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/login", "/klienci", "/dodaj/nowe/zgłoszenie", "/mechanicy", "/naprawy", "/pojazdy", "/dodaj/klienta", "/przyjecie/naprawy", "/dodaj/mechanika", "/dodaj/pojazdy").permitAll()
+                        .requestMatchers("/", "/login", "/klienci", "/dodaj/nowe/zgloszenie", "/mechanicy", "/naprawy", "/pojazdy", "/dodaj/klienta", "/przyjecie/naprawy", "/dodaj/mechanika", "/dodaj/pojazdy").permitAll()
                         //.requestMatchers("/clients", "/cars", "/modify/car", "/repairs", "/accept/repair").hasAnyRole("MECHANIC", "ADMIN")
                         .requestMatchers("/modyfikuj/dane/pojazdow").permitAll()
-                        .requestMatchers("/modyfikuj/opis_usterki", "/modyfikuj/rozpoczecie_naprawy", "/modyfikuj/zakonczenie_naprawy").permitAll()
+                        .requestMatchers("/modyfikuj/opis_usterki", "/modyfikuj/rozpoczecie_naprawy", "/modyfikuj/zakonczenie_naprawy", "/modyfikuj/dane/naprawy").permitAll()
                         .requestMatchers("/modyfikuj/dane/klienta", "/zwolnij/mechanika").permitAll()
                         .anyRequest().authenticated()
                 )
