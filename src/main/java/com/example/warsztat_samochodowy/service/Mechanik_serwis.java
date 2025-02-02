@@ -100,4 +100,26 @@ public class Mechanik_serwis {
         naprawaRepository.save(staraNaprawa.get());
         return staraNaprawa.get();
     }
+
+    public Naprawa Modyfikuj_naprawe(Naprawa naprawa){
+
+        Optional<Naprawa> staraNaprawa = naprawaRepository.findByNaprawaID(naprawa.getNaprawaID());
+
+        if (staraNaprawa.isEmpty()) {
+            throw new NaprawaNotFoundException("Nie znalezniono podanej naprawy w bazie");
+        }
+
+        staraNaprawa.get().setOpis_usterki(naprawa.getOpis_usterki());
+        staraNaprawa.get().setStan(naprawa.getStan());
+        staraNaprawa.get().setProtokol_naprawy(naprawa.getProtokol_naprawy());
+        staraNaprawa.get().setData_rozpoczecia(naprawa.getData_rozpoczecia());
+        staraNaprawa.get().setData_zakonczenia(naprawa.getData_zakonczenia());
+        if(naprawa.getData_rozpoczecia() != null && naprawa.getData_zakonczenia() != null) {
+            if (naprawa.getData_zakonczenia().before(staraNaprawa.get().getData_rozpoczecia())) {
+                throw new DataToEarlyException("Data zakończenia nie może być wcześniejsza niż data rozpoczęcia");
+            }
+        }
+        naprawaRepository.save(staraNaprawa.get());
+        return staraNaprawa.get();
+    }
 }

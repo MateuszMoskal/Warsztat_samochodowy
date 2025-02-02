@@ -87,7 +87,12 @@ public class Warsztat_serwis {
         // sprawdzic czy mechanik istnieje w bazie
         Optional<Mechanik> mechanikZBazyDanych = mechanikRepository.findByLogin(mechanik.getLogin());
         if(mechanikZBazyDanych.isPresent()){
-            mechanikZBazyDanych.get().setCzyZatrudniony("NIE");
+            if(mechanikZBazyDanych.get().getCzyZatrudniony().equals("TAK")){
+                mechanikZBazyDanych.get().setCzyZatrudniony("NIE");
+            }
+            else {
+                mechanikZBazyDanych.get().setCzyZatrudniony("TAK");
+            }
             mechanikRepository.save(mechanikZBazyDanych.get());
             return mechanikZBazyDanych.get();
         }

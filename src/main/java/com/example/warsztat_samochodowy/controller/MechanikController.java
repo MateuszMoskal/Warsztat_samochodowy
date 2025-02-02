@@ -53,5 +53,11 @@ public class MechanikController {
         return ResponseEntity.ok(nowaNaprawa);
     }
 
+    @PatchMapping("/modyfikuj/dane/naprawy")
+    public ResponseEntity<Naprawa> Modyfikuj_naprawe(@RequestBody Naprawa naprawa){
+        Naprawa nowaNaprawa = mechanik_serwis.Modyfikuj_naprawe(naprawa);
+        return ResponseEntity.ok(nowaNaprawa);
+    }
+
 
 }
