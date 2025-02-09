@@ -74,6 +74,7 @@ public class Warsztat_serwis {
         return listaMechanikow;
     }
     public Mechanik Dodawanie_mechanika(Mechanik mechanik){
+        //String hasloZaszyfrowane = passwordEncoder.encode(mechanik.getHaslo());
         Mechanik nowyMechanik = new Mechanik(mechanik.getImie(), mechanik.getNazwisko(), mechanik.getLogin(), mechanik.getHaslo());
         Optional<Mechanik> mechanikWBazie = mechanikRepository.findByLogin(mechanik.getLogin());
         if(mechanikWBazie.isEmpty()){
