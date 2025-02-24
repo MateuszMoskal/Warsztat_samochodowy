@@ -31,7 +31,7 @@ public class Pojazd {
         this.marka = marka;
         this.model = model;
         this.rocznik = rocznik;
-        this.vin = vin;
+        this.vin = VIN;
     }
 
     public Pojazd() {

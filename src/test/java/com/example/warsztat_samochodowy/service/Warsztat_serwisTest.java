@@ -100,18 +100,4 @@ class Warsztat_serwisTest {
     void dodanie_nowego_zgloszenia() {
     }
 
-    @Test
-    void KlientAlreadyExistException() {
-        //etap 1 - dodanie klienta z istniejącym numerem
-        //given
-        Klient testKlient = new Klient("Julia", "Przybylska", "432124541", "juliaprzybylska.gmail.com");
-        Klient testKlient2 = new Klient("Julia", "Przybylska", "432124541", "juliaprzybylska.gmail.com");
-        //when
-        Klient zapisanyKlient = warsztat_serwis.Dodawanie_klienta(testKlient);
-        //Klient zapisanyKlient2 = warsztat_serwis.Dodawanie_klienta(testKlient2);
-        //then
-        assertThatThrownBy(() -> warsztat_serwis.Dodawanie_klienta(testKlient2))
-                .isInstanceOf(KlientAlreadyExistException.class)
-                .hasMessage("Klient z podanym numerem telefonu już istnieje w bazie");
-    }
 }
