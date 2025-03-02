@@ -80,7 +80,7 @@ public class Mechanik_serwis {
         }
         Optional<Naprawa> naprawa = naprawaRepository.findById(naprawaDto.getNaprawaID());
         if (naprawa.isEmpty()) {
-            throw new NaprawaNotFoundException("Nie znaleziono podanej naprawy. Nie udało się dodać mechanika");
+            throw new NaprawaNotFoundException("Nie znaleziono podanej naprawy. Nie udalo sie dodac mechanika");
         }
         naprawa.get().setMechanik(mechanik.get());
         return naprawaRepository.save(naprawa.get());
@@ -95,7 +95,7 @@ public class Mechanik_serwis {
         }
         staraNaprawa.get().setData_zakonczenia(naprawa.getData_zakonczenia());
         if (naprawa.getData_zakonczenia().before(staraNaprawa.get().getData_rozpoczecia())) {
-            throw new DataToEarlyException("Data zakończenia nie może być wcześniejsza niż data rozpoczęcia");
+            throw new DataToEarlyException("Data zakonczenia nie moze byc wczesniejsza niz data rozpoczecia");
         }
         naprawaRepository.save(staraNaprawa.get());
         return staraNaprawa.get();
@@ -116,7 +116,7 @@ public class Mechanik_serwis {
         staraNaprawa.get().setData_zakonczenia(naprawa.getData_zakonczenia());
         if(naprawa.getData_rozpoczecia() != null && naprawa.getData_zakonczenia() != null) {
             if (naprawa.getData_zakonczenia().before(staraNaprawa.get().getData_rozpoczecia())) {
-                throw new DataToEarlyException("Data zakończenia nie może być wcześniejsza niż data rozpoczęcia");
+                throw new DataToEarlyException("Data zakonczenia nie moze byc wczesniejsza niż data rozpoczecia");
             }
         }
         naprawaRepository.save(staraNaprawa.get());

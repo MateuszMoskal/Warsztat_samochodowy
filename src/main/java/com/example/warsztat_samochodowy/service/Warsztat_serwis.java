@@ -46,7 +46,7 @@ public class Warsztat_serwis {
     public Klient Dodawanie_klienta(Klient klient) {
         Optional<Klient> staryKlient = klientRepository.findByTelefon(klient.getTelefon());
         if (staryKlient.isPresent()) {
-            throw new KlientAlreadyExistException("Klient z podanym numerem telefonu już istnieje w bazie");
+            throw new KlientAlreadyExistException("Klient z podanym numerem telefonu juz istnieje w bazie");
         }
         return klientRepository.save(klient);
     }
@@ -81,7 +81,7 @@ public class Warsztat_serwis {
             return mechanikRepository.save(nowyMechanik);
         }
         else {
-            throw new MechanikAlreadyExistException("Mechanik już istnieje w bazie");
+            throw new MechanikAlreadyExistException("Mechanik juz istnieje w bazie");
         }
     }
     public Mechanik Zwolnienie_mechanika(Mechanik mechanik){
@@ -122,7 +122,7 @@ public class Warsztat_serwis {
         Optional<Klient> klient = klientRepository.findByTelefon(telefon);
         Optional<Pojazd> staryPojazd = pojazdRepository.findByVin(pojazd.getVIN());
         if(staryPojazd.isPresent()){
-            throw new PojazdAlreadyExistException("Pojazd z podanym numerem VIN istnieje już w bazie");
+            throw new PojazdAlreadyExistException("Pojazd z podanym numerem VIN istnieje juz w bazie");
         }
         if (klient.isEmpty()) {
             throw new KlientNotFoundException("Klient z podanym telefonem nie istnieje w bazie");
@@ -160,7 +160,7 @@ public class Warsztat_serwis {
             nowa_naprawa = new Naprawa(savedPojazd);
         } else {
             if (!pojazdWBazie.get().getKlient().getTelefon().equals(savedKlient.getTelefon())) {
-                throw new KlientAlreadyExistException("Pojazd posiada już właściciela z innym numerem telefonu");
+                throw new KlientAlreadyExistException("Pojazd posiada już wlasciciela z innym numerem telefonu");
             }
             nowa_naprawa = new Naprawa(pojazdWBazie.get());
         }
